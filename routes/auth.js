@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const {
   checkUsernameAndPasswordNotEmpty,
-  checkIfLoggedIn
+  checkIfLoggedIn,
 } = require("../middlewares");
 
 const User = require("../models/User");
@@ -40,7 +40,7 @@ router.post(
         username,
         hashedPassword,
         name,
-        surname
+        surname,
       });
       req.session.currentUser = newUser;
       return res.json(newUser);
@@ -74,12 +74,30 @@ router.post(
 
 /* GET user logout */
 router.get("/logout", (req, res, next) => {
-  req.session.destroy(err => {
+  req.session.destroy((err) => {
     if (err) {
       next(err);
     }
     return res.status(204).send();
   });
+});
+
+/* POST user account is deleted  */
+router.post("/deleteAccount", checkIfLoggedIn, async (req, res, next) => {
+  const userID = req.session.currentUser._id;
+  console.log("UserID", userID);
+
+  try {
+    await User.findByIdAndDelete(userID);
+    req.session.destroy((err) => {
+      if (err) {
+        next(err);
+      }
+      return res.status(204).send();
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
