@@ -85,8 +85,6 @@ router.get("/logout", (req, res, next) => {
 /* POST user account is deleted  */
 router.post("/deleteAccount", checkIfLoggedIn, async (req, res, next) => {
   const userID = req.session.currentUser._id;
-  console.log("UserID", userID);
-
   try {
     await User.findByIdAndDelete(userID);
     req.session.destroy((err) => {

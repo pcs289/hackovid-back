@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
-const Preference = require("./Preference")
-const Request = require("./Request")
+const preference = require("./Preference");
+const request = require("./Request");
 
 const { Schema } = mongoose;
+const { preferenceSchema } = preference;
+const { requestSchema } = request;
 
 const userSchema = new Schema(
   {
@@ -12,12 +14,11 @@ const userSchema = new Schema(
     hashedPassword: { type: String },
     avatarImg: {
       type: String,
-      default:
-        "https://res.cloudinary.com/dalhi9ynf/image/upload/v1573857720/mclovin_kprr0f.jpg"
+      default: 'https://res.cloudinary.com/dalhi9ynf/image/upload/v1573857720/mclovin_kprr0f.jpg'
     },
     location: { type: String },
-    prefrences: [ Preference ],
-    requests: [ Request ]
+    preferences: [ preferenceSchema ],
+    requests: [ requestSchema ]
   },
   {
     timestamps: {
