@@ -1,7 +1,7 @@
 const express = require("express");
 
-const User = require("../models/User");
 const Request = require("../models/Request");
+const User = require("../models/User");
 
 const {
     checkDuplicatedRequest,
@@ -11,15 +11,27 @@ const router = express.Router();
 
 router.post(
     "/new",
-    checkDuplicatedRequest,
-    (req, res, next) => {
+    //checkDuplicatedRequest,
+    async (req, res, next) => {
         try {
             const { requester, preference, description } = req.body;
+            var user = await User.findOne({ _id : req.session.currentUser._id })
+            var request = null;
             if(description) {
-                req.session.currentUser.requests.push({ requester : requester, preference : preference, description : description })
+                request = new Request({
+                    requester,
+                    preference,
+                    description
+                })
             } else {
-                req.session.currentUser.requests.push({ requester : requester, preference : preference })
+                request = new Request({
+                    requester,
+                    preference
+                })
             }
+            user.requests.push(request);
+            await user.save();
+            await request.save();
             res.status(200).json({ code : "success" })
         } catch(error) {
             next(error);
