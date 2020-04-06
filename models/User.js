@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+const Preference = require("./Preference")
+const Request = require("./Request")
 
 const { Schema } = mongoose;
-const { ObjectId } = Schema.Types;
 
 const userSchema = new Schema(
   {
@@ -13,7 +14,10 @@ const userSchema = new Schema(
       type: String,
       default:
         "https://res.cloudinary.com/dalhi9ynf/image/upload/v1573857720/mclovin_kprr0f.jpg"
-    }
+    },
+    location: { type: String },
+    prefrences: [ Preference ],
+    requests: [ Request ]
   },
   {
     timestamps: {
