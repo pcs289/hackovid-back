@@ -10,24 +10,18 @@ require("dotenv").config();
 
 // API Routes
 const authRouter = require("./routes/auth");
-const clubs = require("./routes/clubs");
-const bookings = require("./routes/bookings");
-const search = require("./routes/search");
-const profile = require("./routes/profile");
-const reservation = require("./routes/reservation");
 const map = require("./routes/map");
-const player = require("./routes/player");
 
 mongoose.set("useCreateIndex", true);
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log("connected to: ", process.env.MONGO_URL);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
 
@@ -42,18 +36,18 @@ app.use(
   session({
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
-      ttl: 24 * 60 * 60 // 1 day
+      ttl: 24 * 60 * 60, // 1 day
     }),
     secret: process.env.SECRET,
     resave: true,
     saveUninitialized: true,
-    name: "padelnow", // configuracion del nombre de la cookie
+    name: "hackovid", // configuracion del nombre de la cookie
 
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: "none",
-      secure: process.env.NODE_ENV === "production"
-    }
+      secure: process.env.NODE_ENV === "production",
+    },
   })
 );
 
