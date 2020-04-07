@@ -66,7 +66,7 @@ app.use((req, res, next) => {
 // API Routes
 app.use("/", authRouter);
 app.use("/map", map);
-app.use("/request", request)
+app.use("/requests", request);
 app.use("/preferences", preferencesRouter);
 
 // catch 404 and forward to error handler

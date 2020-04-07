@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const request = require("./Request");
 
 const { Schema } = mongoose;
 
@@ -19,7 +18,7 @@ const userSchema = new Schema(
         dayOfWeek: { type: String, required: true },
         hourStart: { type: String, required: true },
         hourEnd: { type: String, required: true }
-    }]}
+    }]},
     requests: [ {type: Schema.ObjectId, ref: 'Request'} ]
   },
   {
