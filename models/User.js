@@ -14,12 +14,12 @@ const userSchema = new Schema(
       default: 'https://res.cloudinary.com/dalhi9ynf/image/upload/v1573857720/mclovin_kprr0f.jpg'
     },
     location: { type: String },
-    preferences: [{
-      type: { type: String, required: true },
-      dayOfWeek: { type: String, required: true },
-      hourStart: { type: String, required: true },
-      hourEnd: { type: String, required: true }
-    }],
+    preferences: { type: [{
+        type: { type: String, required: true },
+        dayOfWeek: { type: String, required: true },
+        hourStart: { type: String, required: true },
+        hourEnd: { type: String, required: true }
+    }]}
     requests: [ {type: Schema.ObjectId, ref: 'Request'} ]
   },
   {
@@ -32,4 +32,7 @@ const userSchema = new Schema(
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+module.exports = {
+    User,
+    userSchema
+};

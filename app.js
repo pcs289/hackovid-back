@@ -12,12 +12,14 @@ require("dotenv").config();
 const authRouter = require("./routes/auth");
 const map = require("./routes/map");
 const request = require("./routes/request");
+const preferencesRouter = require('./routes/preferences');
 
 mongoose.set("useCreateIndex", true);
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log("connected to: ", process.env.MONGO_URL);
@@ -65,6 +67,7 @@ app.use((req, res, next) => {
 app.use("/", authRouter);
 app.use("/map", map);
 app.use("/request", request)
+app.use("/preferences", preferencesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
