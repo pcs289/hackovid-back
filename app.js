@@ -11,12 +11,14 @@ require("dotenv").config();
 // API Routes
 const authRouter = require("./routes/auth");
 const map = require("./routes/map");
+const preferencesRouter = require('./routes/preferences');
 
 mongoose.set("useCreateIndex", true);
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log("connected to: ", process.env.MONGO_URL);
@@ -63,6 +65,7 @@ app.use((req, res, next) => {
 // API Routes
 app.use("/", authRouter);
 app.use("/map", map);
+app.use("/preferences", preferencesRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

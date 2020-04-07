@@ -6,7 +6,7 @@ const {
   checkIfLoggedIn,
 } = require("../middlewares");
 
-const User = require("../models/User");
+const { User } = require("../models/User");
 
 const bcryptSalt = 10;
 

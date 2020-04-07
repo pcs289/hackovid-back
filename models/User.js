@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
-const preference = require("./Preference");
 const request = require("./Request");
 
 const { Schema } = mongoose;
-const { preferenceSchema } = preference;
 const { requestSchema } = request;
 
 const userSchema = new Schema(
@@ -17,7 +15,12 @@ const userSchema = new Schema(
       default: 'https://res.cloudinary.com/dalhi9ynf/image/upload/v1573857720/mclovin_kprr0f.jpg'
     },
     location: { type: String },
-    preferences: [ preferenceSchema ],
+    preferences: { type: [{
+        type: { type: String, required: true },
+        dayOfWeek: { type: String, required: true },
+        hourStart: { type: String, required: true },
+        hourEnd: { type: String, required: true }
+    }]},
     requests: [ requestSchema ]
   },
   {
@@ -30,4 +33,7 @@ const userSchema = new Schema(
 
 const User = mongoose.model("User", userSchema);
 
-module.exports = User;
+module.exports = {
+    User,
+    userSchema
+};
