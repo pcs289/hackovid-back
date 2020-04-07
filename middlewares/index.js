@@ -1,3 +1,5 @@
+const User = require("../models/User");
+
 const checkIfLoggedIn = (req, res, next) => {
   if (req.session.currentUser) {
     next();
@@ -27,8 +29,19 @@ const checkUsernameNotEmpty = (req, res, next) => {
   }
 };
 
+const checkDuplicatedRequest = async (req, res, next) => {
+  const { requester, preference } = req.body;
+  if (!(await User.exists({ _id : req.session.currentUser._id, requests: { requester : requester, preference : preference, status : 0 }}) || 
+        await User.exists({ _id : req.session.currentUser._id, requests: { requester : requester, preference : preference, status : 1 }}))) {
+      next();
+  } else {
+    res.status(409).json({ code: "conflict" });
+  }
+} 
+
 module.exports = {
   checkIfLoggedIn,
   checkUsernameAndPasswordNotEmpty,
   checkUsernameNotEmpty,
+  checkDuplicatedRequest
 };
