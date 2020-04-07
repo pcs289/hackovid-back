@@ -54,26 +54,26 @@ router.get(
     checkIfLoggedIn,
     async (req, res, next) => {
         try {
-            const requests = await Request.findOne({ requester : req.session.currentUser._id })
+            const requests = await Request.findOne({ requester : req.session.currentUser._id });
             res.status(200).json(requests)
         } catch(error) {
             next(error);
         }
     }
-)
+);
 
 router.get(
     "/list/requested",
     checkIfLoggedIn,
     async (req, res, next) => {
         try {
-            const requests = await Request.findOne({ requested : req.session.currentUser._id })
+            const requests = await Request.findOne({ requested : req.session.currentUser._id });
             res.status(200).json(requests)
         } catch(error) {
             next(error);
         }
     }
-)
+);
 
 router.get(
     "/list/requester/status",
@@ -87,7 +87,7 @@ router.get(
             next(error);
         }
     }
-)
+);
 
 router.get(
     "/list/requested/status",
@@ -101,7 +101,7 @@ router.get(
             next(error);
         }
     }
-)
+);
 
 router.put(
     "/status/accept",
@@ -109,13 +109,13 @@ router.put(
     async (req, res, next) => {
         try {
             const { requestID } = req.body;
-            await Request.findOneAndUpdate({ _id : requestID }, { status : 1 })
+            await Request.findOneAndUpdate({ _id : requestID }, { status : 1 });
             res.status(200).json({ code : "success" })
         } catch(error) {
             next(error);
         }
     }
-)
+);
 
 router.put(
     "/status/deny",
@@ -123,13 +123,13 @@ router.put(
     async (req, res, next) => {
         try {
             const { requestID } = req.body;
-            await Request.findOneAndUpdate({ _id : requestID }, { status : 2 })
+            await Request.findOneAndUpdate({ _id : requestID }, { status : 2 });
             res.status(200).json({ code : "success" })
         } catch(error) {
             next(error);
         }
     }
-)
+);
 
 router.put(
     "/status/cancel",
@@ -137,13 +137,13 @@ router.put(
     async (req, res, next) => {
         try {
             const { requestID } = req.body;
-            await Request.findOneAndUpdate({ _id : requestID }, { status : 3 })
+            await Request.findOneAndUpdate({ _id : requestID }, { status : 3 });
             res.status(200).json({ code : "success" })
         } catch(error) {
             next(error);
         }
     }
-)
+);
 
 router.put(
     "/status/done",
@@ -151,13 +151,13 @@ router.put(
     async (req, res, next) => {
         try {
             const { requestID } = req.body;
-            await Request.findOneAndUpdate({ _id : requestID }, { status : 4 })
+            await Request.findOneAndUpdate({ _id : requestID }, { status : 4 });
             res.status(200).json({ code : "success" })
         } catch(error) {
             next(error);
         }
     }
-)
+);
 
 router.put(
     "/update/description",
@@ -169,13 +169,13 @@ router.put(
             if (request.requester._id != req.session.currentUser._id) {
                 return res.status(403).json({ code : "forbidden" })
             }
-            await Request.findOneAndUpdate({ _id : requestID }, { description } )
+            await Request.findOneAndUpdate({ _id : requestID }, { description } );
             res.status(200).json({ code : "success" })
         } catch(error) {
             next(error);
         }
     }
-)
+);
 
 
 module.exports = router;
