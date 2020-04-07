@@ -12,7 +12,17 @@ const userSchema = new Schema(
       type: String,
       default: 'https://res.cloudinary.com/dalhi9ynf/image/upload/v1573857720/mclovin_kprr0f.jpg'
     },
-    location: { type: String },
+    location: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        required: true
+      },
+      coordinates: {
+        type: [Number],
+        required: true
+      }
+    },
     preferences: { type: [{
         type: { type: String, required: true },
         dayOfWeek: { type: String, required: true },
