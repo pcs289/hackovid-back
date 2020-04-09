@@ -24,15 +24,16 @@ router.post(
     checkIfLoggedIn,
     async (req, res, next) => {
         try {
-            const { radius } = req.body;
+            const { radius, dayOfWeek } = req.body;
             const myNeighbors = await User.find({
-                _id: { "$ne": req.session.currentUser._id },
-                location: {
-                    $near: {
-                        $geometry: req.session.currentUser.location,
-                        $maxDistance: radius || 1000
+                "_id": { "$ne": req.session.currentUser._id },
+                "location": {
+                    "$near": {
+                        "$geometry": req.session.currentUser.location,
+                        "$maxDistance": radius || 1000
                     }
-                }
+                },
+                "preferences.dayOfWeek": dayOfWeek || 1
             });
             return res.status(200).json({ neighbors : myNeighbors })
         } catch (error) {
