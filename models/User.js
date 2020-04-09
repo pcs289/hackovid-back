@@ -8,10 +8,7 @@ const userSchema = new Schema(
     name: { type: String },
     surname: { type: String },
     hashedPassword: { type: String },
-    avatarImg: {
-      type: String,
-      default: 'https://res.cloudinary.com/dalhi9ynf/image/upload/v1573857720/mclovin_kprr0f.jpg'
-    },
+    avatarImg : { data: Buffer, contentType: String},
     location: {
       type: {
         type: String,
