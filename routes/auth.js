@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const fs = require('fs');
 
 const {
   checkUsernameAndPasswordNotEmpty,
@@ -38,9 +39,12 @@ router.post(
 
       const location = { type: 'Point', coordinates: [41.38879, 2.15899] };
 
+      var avatarImg = { data: fs.readFileSync("./tmp/default-img.png"), contentType : 'image/png' }
+
       const newUser = await User.create({
         username,
         hashedPassword,
+        avatarImg,
         name,
         surname,
         location
