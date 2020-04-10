@@ -39,7 +39,7 @@ router.post(
 
       const location = { type: 'Point', coordinates: [2.15899, 41.38879] };
 
-      var avatarImg = { data: fs.readFileSync("./tmp/default-img.png"), contentType : 'image/png' }
+      const avatarImg = { data: fs.readFileSync("./tmp/default-img.png"), contentType : 'image/png' };
 
       const newUser = await User.create({
         username,
