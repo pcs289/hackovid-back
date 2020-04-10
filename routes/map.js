@@ -32,9 +32,11 @@ router.post(
                         "$geometry": req.session.currentUser.location,
                         "$maxDistance": radius || 1000
                     }
-                },
-                "preferences.dayOfWeek": dayOfWeek || 1
-            });
+                }
+            }).populate({
+                path: 'offers',
+                match: { 'dayOfWeek': dayOfWeek || 1 }
+            }).exec();
             return res.status(200).json({ neighbors : myNeighbors })
         } catch (error) {
             next(error);

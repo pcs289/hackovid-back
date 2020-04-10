@@ -20,12 +20,7 @@ const userSchema = new Schema(
         required: true
       }
     },
-    preferences: { type: [{
-        type: { type: String, required: true },
-        dayOfWeek: { type: String, required: true },
-        hourStart: { type: String, required: true },
-        hourEnd: { type: String, required: true }
-    }]},
+    offers: [ {type: Schema.ObjectId, ref: 'Offer'} ],
     requests: [ {type: Schema.ObjectId, ref: 'Request'} ]
   },
   {
@@ -39,6 +34,5 @@ const userSchema = new Schema(
 const User = mongoose.model("User", userSchema);
 
 module.exports = {
-    User,
-    userSchema
+    User
 };

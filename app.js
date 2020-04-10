@@ -11,8 +11,8 @@ require("dotenv").config();
 // API Routes
 const authRouter = require("./routes/auth");
 const map = require("./routes/map");
-const request = require("./routes/request");
-const preferences = require('./routes/preferences');
+const request = require("./routes/requests");
+const offers = require('./routes/offers');
 const images = require('./routes/images');
 
 mongoose.set("useCreateIndex", true);
@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 app.use("/", authRouter);
 app.use("/map", map);
 app.use("/requests", request);
-app.use("/preferences", preferences);
+app.use("/offers", offers);
 app.use("/image", images);
 
 // catch 404 and forward to error handler
