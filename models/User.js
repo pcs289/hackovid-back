@@ -8,6 +8,7 @@ const userSchema = new Schema(
     name: { type: String },
     surname: { type: String },
     hashedPassword: { type: String },
+    contactInfo: { type: String },
     avatarImg : { data: Buffer, contentType: String },
     location: {
       type: {
