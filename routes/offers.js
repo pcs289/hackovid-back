@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const { User } = require("../models/User");
 const {Offer} = require("../models/Offer");
@@ -46,6 +47,10 @@ router.post("/create", checkIfLoggedIn, async (req, res, next) => {
 // Find an offer
 router.get('/:id', checkIfLoggedIn, async (req, res, next) => {
   try {
+    const valid = mongoose.Types.ObjectId.isValid(req.params.id);
+    if (!valid) {
+      return res.status(403).json({code: 'invalid-id'});
+    }
     const offer = await Offer.findOne({_id: req.params.id});
     return res.status(200).json(offer);
   } catch (error) {
