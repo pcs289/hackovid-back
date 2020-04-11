@@ -41,7 +41,7 @@ router.post(
         try {
             const { radius, dayOfWeek } = req.body;
             const myNeighbors = await User.find({
-
+                "_id": { "$ne": req.session.currentUser._id },
                 "location": {
                     "$near": {
                         "$geometry": req.session.currentUser.location,
