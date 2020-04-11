@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const { User } = require("../models/User");
+const { Request } = require("../models/Request");
 const {Offer} = require("../models/Offer");
 const { checkIfLoggedIn } = require("../middlewares/index");
 
@@ -9,7 +10,16 @@ const { checkIfLoggedIn } = require("../middlewares/index");
 router.get("/list", checkIfLoggedIn, async (req, res, next) => {
   try {
     const myOffers = await Offer.find({creator: req.session.currentUser._id});
-    res.json(myOffers);
+    const result = [];
+    for(let offer of myOffers) {
+      if (offer.status === 2) {
+        const requests = await Request.find({offer: offer._id});
+        result.push(Object.assign({}, offer._doc, { requests }));
+      } else {
+        result.push(Object.assign({}, offer._doc));
+      }
+    }
+    res.json(result);
   } catch (error) {
     next(error);
   }
