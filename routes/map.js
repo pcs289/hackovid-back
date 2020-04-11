@@ -25,7 +25,7 @@ const distance = (pos1, pos2) => {
   const x1 = pos2.lat-pos1.lat;
   const dLat = toRad(x1);
   const x2 = pos2.lon-pos1.lon;
-  const dLon = toRad(x1);
+  const dLon = toRad(x2);
   const a =
       Math.sin(dLat/2) * Math.sin(dLat/2) +
       Math.cos(toRad(pos1.lat)) * Math.cos(toRad(pos2.lat)) *
