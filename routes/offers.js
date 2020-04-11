@@ -43,6 +43,16 @@ router.post("/create", checkIfLoggedIn, async (req, res, next) => {
   }
 });
 
+// Find an offer
+router.get('/:id', checkIfLoggedIn, async (req, res, next) => {
+  try {
+    const offer = await Offer.findOne({_id: req.params.id});
+    return res.status(200).json(offer);
+  } catch (error) {
+    next(error);
+  }
+});
+
 /* PUT update offer */
 router.put("/:id", checkIfLoggedIn, async (req, res, next) => {
   try {
