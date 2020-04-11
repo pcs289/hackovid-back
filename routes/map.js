@@ -56,7 +56,7 @@ router.post(
                     if (offer && offer.dayOfWeek === parseInt(dayOfWeek)) {
                         const loc = req.session.currentUser.location;
                         const proximity = distance({lat: neig.location.coordinates[1], lon: neig.location.coordinates[0]}, {lat: loc.coordinates[1], lon: loc.coordinates[0]});
-                        offers.push(Object.assign({}, offer._doc, { proximity, location: neig.location }));
+                        offers.push(Object.assign({}, offer._doc, { proximity, location: neig.location, username: neig.username }));
                     }
                 }
             }
