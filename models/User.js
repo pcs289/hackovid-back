@@ -8,8 +8,8 @@ const userSchema = new Schema(
     name: { type: String },
     surname: { type: String },
     hashedPassword: { type: String },
+    description: { type: String },
     contactInfo: { type: String },
-    avatarImg : { data: Buffer, contentType: String },
     location: {
       type: {
         type: String,
@@ -21,6 +21,7 @@ const userSchema = new Schema(
         required: true
       }
     },
+    avatarImg : { data: Buffer, contentType: String },
     offers: [ {type: Schema.ObjectId, ref: 'Offer'} ],
     requests: [ {type: Schema.ObjectId, ref: 'Request'} ]
   },

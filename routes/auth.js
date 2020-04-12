@@ -27,7 +27,7 @@ router.post(
   "/signup",
   checkUsernameAndPasswordNotEmpty,
   async (req, res, next) => {
-    const { name, surname, username, password } = res.locals.auth;
+    const { name, surname, username, password, contactInfo, description } = res.locals.auth;
     try {
       const user = await User.findOne({ username });
       if (user) {
@@ -44,6 +44,8 @@ router.post(
       const newUser = await User.create({
         username,
         hashedPassword,
+        contactInfo,
+        description,
         avatarImg,
         name,
         surname,

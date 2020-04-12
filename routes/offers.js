@@ -6,6 +6,10 @@ const { Request } = require("../models/Request");
 const {Offer} = require("../models/Offer");
 const { checkIfLoggedIn } = require("../middlewares/index");
 
+router.get('/all', checkIfLoggedIn, async (req, res) => {
+  res.json(await Offer.find());
+});
+
 /* GET list my offers */
 router.get("/list", checkIfLoggedIn, async (req, res, next) => {
   try {
@@ -13,7 +17,7 @@ router.get("/list", checkIfLoggedIn, async (req, res, next) => {
     const result = [];
     for(let offer of myOffers) {
       if (offer.status === 2) {
-        const requests = await Request.find({offer: offer._id});
+        const requests = await Request.find({offer: offer._id}).populate('requester', 'username avatarImg');
         result.push(Object.assign({}, offer._doc, { requests }));
       } else {
         result.push(Object.assign({}, offer._doc));
@@ -61,7 +65,7 @@ router.get('/:id', checkIfLoggedIn, async (req, res, next) => {
     if (!valid) {
       return res.status(403).json({code: 'invalid-id'});
     }
-    const offer = await Offer.findOne({_id: req.params.id});
+    const offer = await Offer.findOne({_id: req.params.id}).populate('creator');
     return res.status(200).json(offer);
   } catch (error) {
     next(error);
@@ -83,7 +87,7 @@ router.put("/:id", checkIfLoggedIn, async (req, res, next) => {
     if (description) {
       offer.description = description;
     }
-    offer.status = parseInt(status) >= 0 && parseInt(status) <= 3 ? parseInt(status) : 0 ;
+    offer.status = parseInt(status) >= 0 && parseInt(status) <= 3 ? parseInt(status) : 1 ;
     if (startDate && endDate) {
       const day = new Date(startDate).getDay();
       offer.dayOfWeek = day === 0 ? 7 : day;
@@ -98,11 +102,30 @@ router.put("/:id", checkIfLoggedIn, async (req, res, next) => {
 });
 
 router.delete("/:id", checkIfLoggedIn, async (req, res, next) => {
+
+  // Deletes all linked requests from requesters respectives requests' array
+  const checkLinkedRequests = async (offerId) => {
+    const offer = await Offer.findOne({_id: offerId});
+    const requests = await Request.find({ offer }).populate('requester');
+    for(let req of requests) {
+      const requester = await User.findOne({_id: offer.requester._id});
+      requester.requests = requester.requests.filter(re => re !== req.id);
+      requester.save();
+      req.delete();
+    }
+    offer.requests = offer.requests.filter(req => req !== id);
+    if (offer.requests.length === 0) {
+      offer.status = 1;
+    }
+    return offer.save();
+  };
+
   try {
     const { id } = req.params;
     const me = await User.findOne({_id: req.session.currentUser._id});
-    me.offers = me.offers.filter((offer) => offer._id !== id);
+    me.offers = me.offers.filter((offer) => offer !== id);
     await me.save();
+    await checkLinkedRequests(id);
     const result = await Offer.findOneAndDelete({ _id: id });
     res.status(200).json({code: 'success', result});
   } catch (e) {

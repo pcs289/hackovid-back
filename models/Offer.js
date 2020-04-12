@@ -12,7 +12,8 @@ const offerSchema = new Schema(
         description: { type: String, required: true },
         dayOfWeek: { type: Number, required: true }, // Format 1-7, used to search
         startDate: { type: String, required: true },
-        endDate: { type: String, required: true }
+        endDate: { type: String, required: true },
+        requests: [{ type: Schema.ObjectId, ref: 'Request', required: true }]
     },
     {
         timestamps: {

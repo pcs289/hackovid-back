@@ -3,6 +3,7 @@ const router = express.Router();
 
 const { User } = require("../models/User");
 const { Offer } = require("../models/Offer");
+const { Request } = require("../models/Request");
 const { checkIfLoggedIn } = require("../middlewares/index");
 
 router.put(
@@ -41,7 +42,8 @@ router.post(
         try {
             const { radius, dayOfWeek } = req.body;
             const myNeighbors = await User.find({
-                "_id": { "$ne": req.session.currentUser._id },
+                // TODO: TREURE EN PRODUCCIO
+                // "_id": { "$ne": req.session.currentUser._id },
                 "location": {
                     "$near": {
                         "$geometry": req.session.currentUser.location,
@@ -53,10 +55,13 @@ router.post(
             for (let neig of myNeighbors) {
                 for (let offerId of neig.offers) {
                     const offer = await Offer.findOne({ _id: offerId });
-                    if (offer && offer.dayOfWeek === parseInt(dayOfWeek)) {
+                    if (offer &&
+                        offer.dayOfWeek === parseInt(dayOfWeek) &&
+                        offer.status === 1) {
                         const loc = req.session.currentUser.location;
                         const proximity = distance({lat: neig.location.coordinates[1], lon: neig.location.coordinates[0]}, {lat: loc.coordinates[1], lon: loc.coordinates[0]});
-                        offers.push(Object.assign({}, offer._doc, { proximity, location: neig.location, username: neig.username }));
+                        const requests = await Request.find({offer}).populate('requester', 'username avatarImg');
+                        offers.push(Object.assign({}, offer._doc, { proximity, location: neig.location, username: neig.username, requests }));
                     }
                 }
             }
