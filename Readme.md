@@ -1,6 +1,6 @@
-# PimPamPum Backend
+# Apropapp Backend
 
-In this repository you will find the source code for the PimPamPum backend. 
+In this repository you will find the source code for the Apropapp backend. 
 
 ## Installation
 
