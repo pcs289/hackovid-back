@@ -64,13 +64,18 @@ router.put(
         try {
             const { requestId } = req.body;
             const { statusCode } = req.params;
-            const code = parseInt(statusCode) >= 0 && parseInt(statusCode) <= 3 ? parseInt(statusCode) : 0 ;
-            if (code === 2) {
-                // TODO: When accepting a request, the rest of candidates to the same offer, should be marked as cancelled
-            } else if (code === 3) {
-                // TODO: When denying a request
-            }
             const request = await Request.findOne({ _id: requestId });
+            const code = parseInt(statusCode) >= 0 && parseInt(statusCode) <= 3 ? parseInt(statusCode) : 0 ;
+            if (code === 1) {
+                // When accepting a request, the rest of candidates to the same offer, should be marked as cancelled
+                const candidatesRequests = Request.find({ offer: request.offer._id });
+                for (let req of candidatesRequests) {
+                    if (req._id !== requestId) {
+                        req.status = 3;
+                        req.save();
+                    }
+                }
+            }
             request.status = code;
             const updatedRequest = await request.save();
             res.status(200).json(updatedRequest)
