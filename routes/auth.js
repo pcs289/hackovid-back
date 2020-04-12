@@ -22,6 +22,36 @@ router.get("/me", (req, res, next) => {
   }
 });
 
+/* GET current user data */
+router.put("/me", checkIfLoggedIn, async (req, res, next) => {
+  try {
+
+    const { name, surname, password, description, contactInfo } = req.body;
+    const me = await User.findOne({_id: req.session.currentUser._id});
+    if (name) {
+      me.name = name;
+    }
+    if (surname) {
+      me.surname = surname;
+    }
+    if (description) {
+      me.description = description;
+    }
+    if (contactInfo) {
+      me.contactInfo = contactInfo;
+    }
+    if (password) {
+      const salt = bcrypt.genSaltSync(bcryptSalt);
+      me.hashedPassword = bcrypt.hashSync(password, salt);
+    }
+    const updatedMe = await me.save();
+    return res.status(200).json(updatedMe);
+
+  } catch (e) {
+    next(e);
+  }
+});
+
 /* POST user signup data */
 router.post(
   "/signup",

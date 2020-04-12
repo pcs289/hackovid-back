@@ -27,10 +27,10 @@ router
     upload.single('file'),
     async function(req, res, next) {
         try {
-            var img = { data: fs.readFileSync(req.file.path), contentType : 'image/png' }
-            await User.findByIdAndUpdate({ _id : req.session.currentUser._id }, { avatarImg : img  })
+            const img = { data: fs.readFileSync(req.file.path), contentType : 'image/png' };
+            await User.findByIdAndUpdate({ _id : req.session.currentUser._id }, { avatarImg : img  });
             res.status(200).json({ code: 'success' });
-            fs.unlinkSync(req.file.path)
+            fs.unlinkSync(req.file.path);
         } catch(error) {
             next(error);
         }
