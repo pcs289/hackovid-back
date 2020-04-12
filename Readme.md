@@ -1,6 +1,8 @@
 # Apropapp Backend
 
-In this repository you will find the source code for the Apropapp backend. 
+In this repository you will find the source code for the Apropapp backend.
+
+More details for the frontend implementation can be found at [Apropapp Frontend](https://github.com/pcs289/hackovid-back)
 
 ## Installation
 
